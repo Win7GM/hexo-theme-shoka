@@ -80,10 +80,28 @@ const pjaxScript = function(element) {
 }
 
 const pageScroll = function (target, height, complete) {
-  Velocity(target, "scroll", {
+  target && Velocity(target, "scroll", {
     duration: 500,
     easing: "easeOutQuart",
     offset: height || -siteNavHeight,
     complete: complete || function() {}
   });
+}
+
+const padWithZeros = function(vNumber, width) {
+  var numAsString = vNumber.toString()
+  while (numAsString.length < width) {
+    numAsString = '0' + numAsString
+  }
+  return numAsString
+}
+
+const dateFormat = function(date) {
+  var vDay = padWithZeros(date.getDate(), 2)
+  var vMonth = padWithZeros(date.getMonth() + 1, 2)
+  var vYear = padWithZeros(date.getFullYear(), 2)
+  var vHour = padWithZeros(date.getHours(), 2);
+  var vMinute = padWithZeros(date.getMinutes(), 2);
+  var vSecond = padWithZeros(date.getSeconds(), 2);
+  return vYear + '-' + vMonth+ '-' + vDay + ' ' +vHour+ ':' +vMinute+ ':' +vSecond;
 }

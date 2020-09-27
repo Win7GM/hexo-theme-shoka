@@ -1,4 +1,7 @@
 {% import '_macro/sidebar.njk' as sidebar with context %}
+{% import '_macro/breadcrumb.njk' as breadcrumb with context %}
+{% import '_macro/widgets.njk' as widgets with context %}
+
 <!DOCTYPE html>
 <html lang="{{ config.language }}">
 <head>
@@ -82,6 +85,9 @@
     </main>
     <footer id="footer">
       <div class="inner">
+        <div class="widgets">
+          {{ widgets.render() }}
+        </div>
         {{ partial('_partials/footer.njk', {}, {cache: true}) }}
       </div>
     </footer>

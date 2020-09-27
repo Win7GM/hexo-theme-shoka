@@ -171,13 +171,13 @@ algolia:
   chunkSize: 5000
   indexName: #"shoka"
   fields:
-    - categories
+    - title #必须配置
+    - path #必须配置
+    - categories #推荐配置
     - content:strip:truncate,0,2000
     - gallery
-    - path
     - photos
     - tags
-    - title
 ```
 
 ## feed配置建议
@@ -280,6 +280,7 @@ font:
 ## 菜单与社交按钮icon
 这里没有直接使用Font Awesome，是因为用不到那么多icon感觉非常浪费，因此在Iconfont上重新建立了一个项目。
 `font-family`设为`ic`，所有字体样式前缀为`i-`，具体参见`themes/shoka/source/css/scaffolding/iconfont.styl`。
+全部图标预览可以打开`themes/shoka/source/css/_common/scaffolding/icon/demo_index.html`文件查看。
 
 ```yml
 menu:
@@ -333,7 +334,12 @@ menu:
 位于`<root>/themes/shoka/source/images/`目录里的图片们都是可以修改的。
 
 1. 修改头像 `avatar.jpg` 
-  如果要设置不同的文件名，或者其他非本地图片，需要修改`<root>/themes/shoka/layout/_partials/sidebar/overview.njk`文件的第3行。
+  如果要设置不同的文件名，请在主题`_config.yml`修改
+  ```yml
+  sidebar:
+    # Replace the default avatar image and set the url here.
+    avatar: avatar.jpg
+  ```
 
 2. 修改打赏二维码文件，共三个
 
@@ -441,26 +447,26 @@ vendors:
 # 首页显示
 ## 文章图片
 - 如果文章的Front Matter设置了`cover: image path`，则封面会显示这张图片。
-```yml 举个栗子
-title: Images
-cover: assets/wallpaper-2572384.jpg
-# 或者写成
-cover: http://placehold.it/350x150.jpg
----
-```
-这里`cover`的值可以是位于`source`目录里的图片文件，此处是`<root>/source/assets/wallpaper-2572384.jpg`文件，也可以是一个某网址。
+  ```yml 举个栗子
+  title: Images
+  cover: assets/wallpaper-2572384.jpg
+  # 或者写成
+  cover: http://placehold.it/350x150.jpg
+  ---
+  ```
+  这里`cover`的值可以是位于`source`目录里的图片文件，此处是`<root>/source/assets/wallpaper-2572384.jpg`文件，也可以是一个某网址。
 
 - 如果文章是一个`gallery post`，即Front Matter设置了`photos`，则会封面会显示设置的第一张图片。
-```yml 举个栗子
-title: Gallery Post
-photos:
-- assets/wallpaper-2572384.jpg
-- assets/wallpaper-2311325.jpg
-- assets/wallpaper-878514.jpg
-- http://placehold.it/350x150.jpg
----
-```
-此时默认会显示第一个图片，即位于`<root>/source/assets/`目录里的`wallpaper-2572384.jpg`。
+  ```yml 举个栗子
+  title: Gallery Post
+  photos:
+  - assets/wallpaper-2572384.jpg
+  - assets/wallpaper-2311325.jpg
+  - assets/wallpaper-878514.jpg
+  - http://placehold.it/350x150.jpg
+  ---
+  ```
+  此时默认会显示第一个图片，即位于`<root>/source/assets/`目录里的`wallpaper-2572384.jpg`。
 
 - 如果以上设置均不存在，将显示一张随机图片。
 图片取自`<root>/themes/shoka/_images.yml`中，使用渣浪图床。
@@ -492,6 +498,8 @@ sticky: true
     零基础学Java语言-浙江大学-翁恺: course-1
     面向对象程序设计-Java语言-浙江大学-翁恺: course-2
   ```
+  > 注意：hexo会自动处理路径中的特殊字符，~\`!@#$%^&*()-_+=[]{}|\\;:"'<>,.?以及空格，这些全部会被替换成`-`
+  > 所以避免在设置中使用上述字符，否则可导致无法抓取到目录下的`cover.jpg`
   
 2. 在`<root>/source/_posts`文件夹相应的目录里，存放封面图
 例子：如 [第1周 计算](https://shoka.lostyu.me/computer-science/java/course-1/week-1/) 这篇文章。
@@ -741,7 +749,7 @@ drwxr--r-x  45 chris  chris     92 Feb 14 11:10 ..
 `>` | 答案解析
 `[8.4]{.mistake}` | 错题备注
 
-## `emoji` 颜文字
+## `emoji` 绘文字
 
 本功能基于`markdown-it-emoji`
 

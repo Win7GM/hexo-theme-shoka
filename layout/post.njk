@@ -1,6 +1,5 @@
 {% extends '_partials/layout.njk' %}
 {% import '_macro/sidebar.njk' as sidebar with context %}
-{% import '_macro/breadcrumb.njk' as breadcrumb with context %}
 {% import '_macro/comment.njk' as comment with context %}
 {% import '_macro/postmeta.njk' as postmeta with context %}
 
@@ -33,7 +32,7 @@
 
 {% block content %}
   <div class="article wrap">
-    {{ breadcrumb.render(page) }}
+    {{ breadcrumb.render(page, true) }}
     {{ partial('_partials/post/post.njk', {post: page}) }}
   </div>
   {{ partial('_partials/post/nav.njk', {post: page}) }}
