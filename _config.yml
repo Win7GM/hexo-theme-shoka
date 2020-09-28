@@ -75,9 +75,8 @@ menu:
 
 sidebar:
   # Sidebar Position.
-  position: left
-  #position: right
-  # Replace the default avatar image and set the url here.
+  #position: left
+  position: right
   avatar: avatar.jpg
 
 # Social Links
@@ -88,11 +87,11 @@ sidebar:
 social:
   github: https://github.com/yourname || github || "#191717"
   #google: https://plus.google.com/yourname || google
-  twitter: https://twitter.com/yourname || twitter || "#00aff0"
-  zhihu: https://www.zhihu.com/people/yourname || zhihu || "#1e88e5"
-  music: https://music.163.com/#/user/home?id=yourid || cloud-music || "#e60026"
-  weibo: https://weibo.com/yourname || weibo || "#ea716e"
-  about: https://about.me/yourname || address-card || "#3b5998"
+  #twitter: https://twitter.com/yourname || twitter || "#00aff0"
+  #zhihu: https://www.zhihu.com/people/yourname || zhihu || "#1e88e5"
+  #music: https://music.163.com/#/user/home?id=yourid || cloud-music || "#e60026"
+  #weibo: https://weibo.com/yourname || weibo || "#ea716e"
+  #about: https://about.me/yourname || address-card || "#3b5998"
   #email: mailto:yourname@mail.com || envelope || "#55acd5"
   #facebook: https://www.facebook.com/yourname || facebook
   #stackoverflow: https://stackoverflow.com/yourname || stack-overflow
@@ -102,7 +101,7 @@ social:
 
 post:
   # Dependencies: https://github.com/theme-next/hexo-symbols-count-time
-  count: false
+  count: true
 
 # TagCloud settings for tags page.
 tagcloud:
@@ -115,21 +114,18 @@ tagcloud:
 
 footer:
   # Specify the date when the site was setup. If not defined, current year will be used.
-  since: 2010
+  since: 2020
   icon:
     name: sakura rotate
     # Change the color of icon, using Hex Code.
     color: "#ffc0cb"
   # Dependencies: https://github.com/theme-next/hexo-symbols-count-time
-  count: false
+  count: true
   powered: true
 
 widgets:
-  # if true, will show random posts
   random_posts: true
-  # if true, will show recent comments
   recent_comments: true
-
 # Creative Commons 4.0 International License.
 # See: https://creativecommons.org/share-your-work/licensing-types-examples
 # Available values of license: by | by-nc | by-nc-nd | by-nc-sa | by-nd | by-sa | zero
@@ -145,19 +141,19 @@ reward:
   enable: true
   account:
     wechatpay: /wechatpay.png
-    alipay: /alipay.png
-    paypal: /paypal.png
+    #alipay: /alipay.png
+    #paypal: /paypal.png
+
+# bgm
+audio:
+  - https://music.163.com/#/playlist?id=94204433
 
 # ---------------------------------------------------------------
 # Third Party Plugins & Services Settings
 # ---------------------------------------------------------------
 
 # Dependencies: https://github.com/amehime/hexo-renderer-multi-markdown-it
-pangu: false
-
-# bgm
-audio:
-  - https://music.163.com/#/playlist?id=2031842656
+pangu: true
 
 # Algolia Search
 # For more information: https://www.algolia.com
@@ -249,7 +245,6 @@ vendors:
     lazyload: npm/lozad@1/dist/lozad.min.js
     quicklink: npm/quicklink@2/dist/quicklink.umd.js
     mediumzoom: npm/medium-zoom@1.0.5/dist/medium-zoom.min.js
-    leancloud: npm/leancloud-storage@3/dist/av-min.js
     valine: js/valine.js
     copy_tex: npm/katex@0/dist/contrib/copy-tex.min.js
     chart: npm/frappe-charts@1.5.0/dist/frappe-charts.min.iife.min.js
