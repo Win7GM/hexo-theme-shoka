@@ -185,9 +185,8 @@ valine:
     - 主人
     - 小伙伴
     - 新朋友
-  master:
-    - 57cf0245456923592cb7d4933ea4b978
-    - e5ba72d05b863a93087fdd81e1a6a788
+  master: ["57cf0245456923592cb7d4933ea4b978", "e5ba72d05b863a93087fdd81e1a6a788"]
+
   friends:
     # - hash of friend@email.com
     # - hash of friend2@email.com
