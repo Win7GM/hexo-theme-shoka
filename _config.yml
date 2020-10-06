@@ -172,8 +172,8 @@ search:
 # Valine
 # For more information: https://github.com/amehime/MiniValine
 valine:
-  appId: #Your_appId
-  appKey: #Your_appkey
+  appId: mCWnwPuS6esiwiyEOio9qnbP-gzGzoHsz
+  appKey: UbSA9UXeM8wmdMPA3AqqqrPL
   placeholder: ヽ(○´∀`)ﾉ♪ # Comment box placeholder
   avatar: mp # Gravatar style : mp, identicon, monsterid, wavatar, robohash, retro
   pageSize: 10 # Pagination size
@@ -187,7 +187,7 @@ valine:
     - 新朋友
   master:
     - 57cf0245456923592cb7d4933ea4b978
-    # - hash of master2@email.com
+    - e5ba72d05b863a93087fdd81e1a6a788
   friends:
     # - hash of friend@email.com
     # - hash of friend2@email.com
