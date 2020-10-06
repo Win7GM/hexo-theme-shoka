@@ -64,7 +64,7 @@ font:
 # Whether to show the loading cat
 loader:
   start: true # When entering the page
-  switch: true # When switching to another page
+  switch: false # When switching to another page
 
 sidebar:
   # Sidebar Position.
@@ -177,7 +177,7 @@ valine:
   placeholder: ヽ(○´∀`)ﾉ♪ # Comment box placeholder
   avatar: mp # Gravatar style : mp, identicon, monsterid, wavatar, robohash, retro
   pageSize: 10 # Pagination size
-  lang: en
+  lang: zh-CN
   visitor: true # Article reading statistic
   NoRecordIP: false # Whether to record the commenter IP
   serverURLs: # When the custom domain name is enabled, fill it in here (it will be detected automatically by default, no need to fill in)
@@ -186,7 +186,7 @@ valine:
     - 小伙伴
     - 新朋友
   master:
-    # - hash of master@email.com
+    - 57cf0245456923592cb7d4933ea4b978
     # - hash of master2@email.com
   friends:
     # - hash of friend@email.com
