@@ -72,6 +72,7 @@ Object.assign(HTMLElement.prototype, {
       return this.style.display
     } else {
       this.style.display = d;
+      return this
     }
   },
   child: function(selector) {
@@ -251,19 +252,21 @@ const mediaPlayer = function(config) {
       var that = this;
       callback = callback || function() {}
       if(!this.loaded) {
-        utils.fetch(this.options.rawList).then(function(list) {
-          that.playlist = list;
-          create.list();
-          that.setMode(t.media.options.mode);
-          that.loaded = true;
-          callback();
-        });
+        if(this.options.rawList)
+          utils.fetch(this.options.rawList).then(function(list) {
+            that.playlist = list;
+            create.list();
+            that.setMode(t.media.options.mode);
+            that.loaded = true;
+            callback();
+          });
       } else {
         callback()
       }
     },
     load: function(newList) {
-      if(newList) {
+      var d = ""
+      if(newList && newList.length > 0) {
         if(this.options.rawList !== newList) {
           this.options.rawList = newList;
           if(this.loaded) {
@@ -271,6 +274,12 @@ const mediaPlayer = function(config) {
             this.fetch();
           }
         }
+      } else {
+        d = "none"
+        this.pause()
+      }
+      for(var el in this.buttons) {
+        this.buttons[el].display(d)
       }
     },
     // 根据模式切换当前曲目pointer
@@ -356,9 +365,7 @@ const mediaPlayer = function(config) {
     },
     scroll: function() {
       var current = this.list.find('li')[this.pointer];
-      Velocity(current, "scroll", {
-        container: current.parentNode
-      });
+      pageScroll(current, current.offsetTop)
     },
     scrollLrc: function(currentTime) {
       var that = this

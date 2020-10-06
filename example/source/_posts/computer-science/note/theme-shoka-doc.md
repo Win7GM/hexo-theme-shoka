@@ -3,11 +3,13 @@ title: Hexo主题Shoka & multi-markdown-it渲染器使用说明
 date: 2020/08/13 20:45:48
 update: 2020/09/27
 categories:
-- [计算机科学, 二进制杂谈, Theme Shoka Documentation]
+ - [计算机科学, 二进制杂谈, Theme Shoka Documentation]
 tags:
-- Hexo
-- 教程
+ - Hexo
+ - 教程
 sticky: true
+valine:
+  placeholder: "1. 提问前请先仔细阅读本文档⚡\n2. 页面显示问题💥，请提供控制台截图📸或者您的测试网址\n3. 其他任何报错💣，请提供详细描述和截图📸，祝食用愉快💪"
 ---
 
 :::info
@@ -17,6 +19,10 @@ sticky: true
 
 已经支持hexo 5。。。本文档和bug不定期更新中。
 如果有什么功能需求，欢迎留言。
+:::
+
+:::warning
+当前版本更新至 0.2.2，[更新记录点此](#更新记录)
 :::
 
 :::primary
@@ -69,4 +75,36 @@ Hexo5可以在根目录新建一个yml文件，命名为`_config.shoka.yml`。
 [主题的基础配置可以参考这里](config/)
 
 # 更新记录
-由于本人太懒，这条暂时没有。
+标签含义：
+❗ 需要手动操作的更新信息
+⚠️ 需要注意的更新信息
+🔧 已修复的问题
+
+## 0.2.1 👉 0.2.2
+⚠️ 弃用`mediumzoom`，改成`fancybox`，[配置戳此](display/#图片展示与相册)
+💡  增加语言包：`繁体中文`和`日语`
+💡  quiz功能优化，根据语言显示题型标签
+🔧 修复评论功能中反复初始化leancloud-storage
+🔧 修复`audio: false`时不能隐藏播放按钮、停止播放
+
+## 0.2 👉 0.2.1
+⚠️ 配置文件添加 `loader` 参数，[配置戳此](config/#加载动画)
+💡  二级list区别显示
+🔧 修复浏览位置定位BUG
+🔧 修复firework动画延迟
+🔧 优化评论功能
+
+## 0.1.9 👉 0.2
+
+⚠️  **评论功能大改**
+- 弃用不开源的Valine，改用MiniValine，并且进行了魔改，[项目戳此](https://github.com/amehime/MiniValine)
+	主要是大量压缩了代码，弃用一些花里胡哨的功能，又加了一些别的花里胡哨的功能。
+- 为防止泄露用户邮箱、IP等隐私信息，弃用QQ号获取昵称及头像。
+	❗ 同时需要手动进行一些迁移，[具体步骤戳此](https://github.com/imaegoo/Valine)
+- ❗ 评论相关的配置亦有更新，[配置戳此](config/#文章评论)
+
+
+⚠️ 增加单击页面烟花效果，[配置戳此](config/#页面特效)
+💡  弃用Velocity，改用anime.js，方便未来添加更多!!花里胡哨的!!功能!!严重拖慢页面滑行速度!!
+🔧 新增多枚icon，包括豆瓣`i-douban`等
+🔧 一些显示问题

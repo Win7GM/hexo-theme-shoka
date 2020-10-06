@@ -6,11 +6,17 @@ categories:
 tags:
 - Hexo
 - 教程
+valine:
+  placeholder: "1. 提问前请先仔细阅读本文档⚡\n2. 页面显示问题💥，请提供控制台截图📸或者您的测试网址\n3. 其他任何报错💣，请提供详细描述和截图📸，祝食用愉快💪"
+audio: false
 ---
 
 :::primary
 [:rocket:快速开始](/computer-science/note/theme-shoka-doc/) - [:love_letter:依赖插件](/computer-science/note/theme-shoka-doc/dependents/) - [**:pushpin:基本配置**](/computer-science/note/theme-shoka-doc/config/) - [:rainbow:界面显示](/computer-science/note/theme-shoka-doc/display/) - [:unicorn:特殊功能](/computer-science/note/theme-shoka-doc/special/)
 :::
+
+这里修改的是`themes/shoka/_config.yml`内的配置参数。
+建议在根目录新建一个yml文件，命名为`_config.shoka.yml`，并在这个自定义文件中增改配置，而非直接修改主体文件夹内的`_config.yml`。
 
 # 站点别称
 ```yml
@@ -80,6 +86,28 @@ font:
 此功能基本参考NexT。
 加粗标题的字体总是使用`Noto Serif`，为了正确友好的显示日文中的汉字，会先后加载`headings`和`title`的字体设置。
 
+# 加载动画
+
+```yml
+# 是否显示页面加载动画loading-cat
+loader:
+  start: true # 当初次打开页面时，显示加载动画
+  switch: true # tab切换到其他页面时，显示加载动画
+```
+
+tab切换后只是显示loading动画，实际并未重新加载页面
+
+# 边栏位置
+
+边栏可以选择在左侧，或右侧
+
+```yml
+sidebar:
+  # Sidebar Position.
+  position: left
+  #position: right
+```
+
 # 菜单与社交按钮icon
 这里没有直接使用Font Awesome，是因为用不到那么多icon感觉非常浪费，因此在Iconfont上重新建立了一个项目。
 `font-family`设为`ic`，所有字体样式前缀为`i-`，具体参见`themes/shoka/source/css/scaffolding/iconfont.styl`。
@@ -111,6 +139,7 @@ social:
   #youtube: https://youtube.com/yourname || youtube
   #instagram: https://instagram.com/yourname || instagram
   #skype: skype:yourname?call|chat || skype
+  #douban: https://www.douban.com/people/yourname/ || douban
 ```
 如上，使用`||`作为分隔符，依次为 `链接 || 图标 || 颜色`。
 注意，只需要写图标名称，如`github`，则会自动转换为`ic i-github`。
@@ -193,19 +222,48 @@ valine:
   appId: #Your_appId
   appKey: #Your_appkey
   placeholder: ヽ(○´∀`)ﾉ♪ # Comment box placeholder
-  avatar: mp # Gravatar style
+  avatar: mp # Gravatar style : mp, identicon, monsterid, wavatar, robohash, retro
   pageSize: 10 # Pagination size
   lang: zh-CN
-  visitor: true # Article reading statistic
-  recordIP: true # Whether to record the commenter IP
+  visitor: true # 文章访问量统计
+  NoRecordIP: false # 不IP记录
   serverURLs: # When the custom domain name is enabled, fill it in here (it will be detected automatically by default, no need to fill in)
-  requiredFields:
-    - nick
-    - mail
-  enableQQ: true
-  masters: ['主人email的MD5值', '另一个email的MD5值']
-  masterTag: 主人
-  tips: "昵称框中填入QQ号，将自动获取QQ昵称&邮箱&头像；其他邮箱由Gavatar提供头像。"
+  tagMeta:
+    - 主人
+    - 小伙伴
+    - 新朋友
+  master:
+    # - hash of master@email.com
+    # - hash of master2@email.com
+  friends:
+    # - hash of friend@email.com
+    # - hash of friend2@email.com
+  powerMode: true # 默认打开评论框输入特效
+```
+
+在文章Front Matter中也可以配置上述参数，访问该文章页面时，将覆盖全局配置。
+尤其可以用来配置一个特殊的placeholder。
+
+```yml
+valine:
+  placeholder: "1. 提问前请先仔细阅读本文档⚡\n2. 页面显示问题💥，请提供控制台截图📸或者您的测试网址\n3. 其他任何报错💣，请提供详细描述和截图📸，祝食用愉快💪"
+---
+```
+
+评论通知与管理工具建议使用这个[Valine-Admin](https://github.com/DesertsP/Valine-Admin)。
+注意`SITE_URL`需要以`/`结尾。
+
+# 页面特效
+除了上述评论框的输入特效，单击页面的烟花效果配置如下
+
+```yml
+fireworks:
+  enable: true # 是否启用
+  color: # 烟花颜色
+    - "rgba(255,182,185,.9)"
+    - "rgba(250,227,217,.9)"
+    - "rgba(187,222,214,.9)"
+    - "rgba(138,198,209,.9)"
 ```
 
 # 加载第三方组件
@@ -214,18 +272,18 @@ vendors:
   css:
     katex: npm/katex@0/dist/katex.min.css
     comment: css/comment.css
+    fancybox: combine/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css,npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css
   js:
     pace: npm/pace-js@1.0.2/pace.min.js
     pjax: npm/pjax@0.2.8/pjax.min.js
     fetch: npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js
-    velocity: npm/velocity-animate@1.5.2/velocity.min.js
-    velocity_ui: npm/velocity-animate@1.5.2/velocity.ui.min.js
+    anime: npm/animejs@3.2.0/lib/anime.min.js
     algolia: npm/algoliasearch@4/dist/algoliasearch-lite.umd.js
     instantsearch: npm/instantsearch.js@4/dist/instantsearch.production.min.js
     lazyload: npm/lozad@1/dist/lozad.min.js
     quicklink: npm/quicklink@2/dist/quicklink.umd.js
-    mediumzoom: npm/medium-zoom@1.0.5/dist/medium-zoom.min.js
-    valine: js/valine.js
+    fancybox: combine/npm/jquery@3.5.1/dist/jquery.min.js,npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js,npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js
+    valine: gh/amehime/MiniValine@4.2.2-beta8/dist/MiniValine.min.js
     copy_tex: npm/katex@0/dist/contrib/copy-tex.min.js
     chart: npm/frappe-charts@1.5.0/dist/frappe-charts.min.iife.min.js
 ```
@@ -234,13 +292,13 @@ vendors:
 --|--|--
 `pace` | 加载进度条|全局
 `pjax` | 页面无刷新加载|全局
-`velocity` | js页面动画效果|全局
+`anime` | js动画效果|全局
 `algolia` `instantsearch`| 基于algolia的站内搜索|全局
 `lazyload` | 图片懒加载|全局
 `quicklink` | 链接资源预加载|全局
 `fetch` | 获取播放列表|全局
 `katex` `copy_tex`|数学公式显示及复制|按需
-`mediumzoom` | 图片放大显示|按需
+`fancybox` | 图片放大显示及排列|按需
 `valine` | 基于LeanCloud的评论系统及文章阅读次数统计|按需
 `chart` | 图表显示|按需
 

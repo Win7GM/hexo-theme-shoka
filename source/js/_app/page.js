@@ -117,23 +117,65 @@ const postBeauty = function () {
     }
   }
 
-  $.each('.md img', function(element) {
-    var info;
-    if(info = element.attr('title')) {
-      var para = document.createElement('span');
-      var txt = document.createTextNode(info);
-      para.appendChild(txt);
-      para.addClass('image-info');
-      element.insertAfter(para);
-    }
-  });
-  if($('.md :not(a) > img, .md > img')) {
-    LOCAL['mediumzoom'] = true;
-    vendorJs('mediumzoom', function() {
-        window.mediumZoom('.md :not(a) > img, .md > img', {
-          background: 'rgba(0, 0, 0, 0.6)'
-        });
-      }, window.mediumZoom);
+  if($('.md img')) {
+    vendorCss('fancybox');
+    vendorJs('fancybox', function() {
+      var q = jQuery.noConflict();
+
+      $.each('p.gallery', function(element) {
+        var box = document.createElement('div');
+        box.className = 'gallery';
+        box.attr('data-height', element.attr('data-height')||120);
+
+        box.innerHTML = element.innerHTML.replace(/<br>/g, "")
+
+        element.parentNode.insertBefore(box, element);
+        element.remove();
+      });
+
+      $.each('.md img', function(element) {
+        var $image = q(element);
+        var info, captionClass;
+        if(!$image.is('a img')) {
+          var imageLink = $image.attr('data-src') || $image.attr('src');
+          $image.data('safe-src', imageLink)
+          var $imageWrapLink = $image.wrap('<a class="fancybox" href="'+imageLink+'" itemscope itemtype="http://schema.org/ImageObject" itemprop="url"></a>').parent('a');
+          if (!$image.is('.gallery img')) {
+            $imageWrapLink.attr('data-fancybox', 'default').attr('rel', 'default');
+            captionClass = 'image-info'
+          } else {
+            captionClass = 'jg-caption'
+          }
+        }
+
+        if(info = element.attr('title')) {
+          var para = document.createElement('span');
+          var txt = document.createTextNode(info);
+          para.appendChild(txt);
+          para.addClass(captionClass);
+          element.insertAfter(para);
+        }
+      });
+
+      q('div.gallery').each(function (i, el) {
+          q(el).justifiedGallery({rowHeight: q(el).data('height')||120, rel: 'gallery-' + i}).on('jg.complete', function () {
+            q(this).find('a').each(function(k, ele) {
+              ele.attr('data-fancybox', 'gallery-' + i);
+            });
+          });
+      });
+
+      q.fancybox.defaults.hash = false;
+      q('.fancybox').fancybox({
+        loop   : true,
+        helpers: {
+          overlay: {
+            locked: false
+          }
+        }
+      });
+
+    }, window.jQuery);
   }
 
   $.each('li ruby', function(element) {
@@ -237,7 +279,7 @@ const postBeauty = function () {
         if (showBtn.hasClass('open')) {
           removeFullscreen()
           hideCode()
-          pageScroll(code_container.parentNode)
+          pageScroll(code_container)
         } else {
           showCode()
         }
@@ -254,9 +296,11 @@ const postBeauty = function () {
       event.preventDefault();
       var qr = $('#qr')
       if(qr.display() === 'inline-flex') {
-        Velocity(qr, "fadeOut");
+        transition(qr, 0)
       } else {
-        Velocity(qr, "transition.slideUpBigIn", {display: 'inline-flex'});
+        transition(qr, 1, function() {
+          qr.display('inline-flex')
+        }) // slideUpBigIn
       }
     });
   });
@@ -277,6 +321,24 @@ const postBeauty = function () {
     element.addEventListener('click', function (event) {
       element.parentNode.toggleClass('show')
     });
+  });
+
+  $.each('.quiz > p:first-child', function (element) {
+    var quiz = element.parentNode;
+    var type = 'choice'
+    if(quiz.hasClass('true') || quiz.hasClass('false'))
+      type = 'true_false'
+    if(quiz.hasClass('multi'))
+      type = 'multiple'
+    if(quiz.hasClass('fill'))
+      type = 'gap_fill'
+    if(quiz.hasClass('essay'))
+      type = 'essay'
+    element.attr('data-type', LOCAL.quiz[type])
+  });
+
+  $.each('.quiz .mistake', function (element) {
+    element.attr('data-type', LOCAL.quiz.mistake)
   });
 
   // tab
@@ -342,22 +404,13 @@ const loadComments = function () {
     return;
   } else {
     goToComment.display("")
-    vendorJs('valine', function() {
-      var options = CONFIG.valine;
-      options.el = '#comments';
-      options.path = element.attr('data-id');
-
-      new Valine(options);
-
-      setTimeout(postionInit, 1000);
-    }, window.Valine);
   }
 
   var io = new IntersectionObserver(function(entries, observer) {
     var entry = entries[0];
     vendorCss('valine');
     if (entry.isIntersecting) {
-      Velocity($('#comments'), 'transition.bounceUpIn');
+      transition($('#comments'), 'bounceUpIn');
       observer.disconnect();
     }
   });
@@ -466,19 +519,16 @@ const algoliaSearch = function(pjax) {
   $.each('.search', function(element) {
     element.addEventListener('click', function() {
       document.body.style.overflow = 'hidden';
-      Velocity(siteSearch, "transition.shrinkIn", {
-        duration: 200,
-        complete: function() {
+      transition(siteSearch, 'shrinkIn', function() {
           $('.search-input').focus();
-        }
-      });
+        }) // transition.shrinkIn
     });
   });
 
   // Monitor main search box
   const onPopupClose = function() {
     document.body.style.overflow = '';
-    Velocity(siteSearch, "transition.shrinkOut");
+    transition(siteSearch, 0); // "transition.shrinkOut"
   };
 
   siteSearch.addEventListener('click', function(event) {

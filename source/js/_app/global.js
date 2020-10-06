@@ -16,7 +16,13 @@ const siteBrand = $('#brand');
 var toolBtn = $('#tool'), toolPlayer, backToTop, goToComment, showContents;
 var siteSearch = $('#search');
 var siteNavHeight, headerHightInner, headerHight;
-var LOCAL_HASH = 0;
+var LOCAL_HASH = 0, LOCAL_URL = window.location.href;
+var pjax;
+const lazyload = lozad('img, [data-background-image]', {
+    loaded: function(el) {
+        el.addClass('lozaded');
+    }
+})
 
 const Loader = {
   timer: null,
@@ -24,19 +30,19 @@ const Loader = {
   show: function() {
     clearTimeout(this.timer);
     document.body.removeClass('loaded');
-    Velocity(loadCat, "fadeIn", {
-      complete: function() {
-        Loader.lock = false;
-      }
-    });
+    loadCat.attr('style', 'display:block');
+    Loader.lock = false;
   },
   hide: function(sec) {
+    if(!CONFIG.loader.start)
+      sec = -1
     this.timer = setTimeout(this.vanish, sec||3000);
   },
   vanish: function() {
     if(Loader.lock)
       return;
-    Velocity(loadCat, "fadeOut");
+    if(CONFIG.loader.start)
+      transition(loadCat, 0)
     document.body.addClass('loaded');
     Loader.lock = true;
   }
@@ -85,35 +91,33 @@ const themeColorListener = function () {
     });
 
     var hideNeko = function() {
-      setTimeout(function() {
-        Velocity(neko, "fadeOut", {
-          complete: function() {
-            BODY.removeChild(neko)
-          }
+        transition(neko, {
+          delay: 2500,
+          opacity: 0
+        }, function() {
+          BODY.removeChild(neko)
         });
-      }, 2500);
     }
 
     if(btn.hasClass('i-sun')) {
-      Velocity(neko, "fadeIn", {
-        complete: function() {
+      var c = function() {
           neko.addClass('dark');
           changeTheme('dark');
           store.set('theme', 'dark');
           hideNeko();
         }
-      });
     } else {
       neko.addClass('dark');
-      Velocity(neko, "fadeIn", {
-        complete: function() {
+      var c = function() {
           neko.removeClass('dark');
           changeTheme();
           store.del('theme');
           hideNeko();
         }
-      });
     }
+    transition(neko, 1, function() {
+      setTimeout(c, 1000)
+    })
   });
 }
 
@@ -123,13 +127,15 @@ const visibilityListener = function () {
       case 'hidden':
         $('[rel="icon"]').attr('href', statics + CONFIG.favicon.hidden);
         document.title = LOCAL.favicon.hide;
-        Loader.show()
+        if(CONFIG.loader.switch)
+          Loader.show()
         clearTimeout(titleTime);
       break;
       case 'visible':
         $('[rel="icon"]').attr('href', statics + CONFIG.favicon.normal);
         document.title = LOCAL.favicon.show;
-        Loader.hide(1000)
+        if(CONFIG.loader.switch)
+          Loader.hide(1000)
         titleTime = setTimeout(function () {
           document.title = originTitle;
         }, 2000);
@@ -214,28 +220,34 @@ const scrollHandle = function (event) {
   $('.percent').width(scrollPercent);
 }
 
-const pagePostion = function(url) {
-  store.set(url, scrollAction.y)
+const pagePosition = function() {
+  store.set(LOCAL_URL, scrollAction.y)
 }
 
-const postionInit = function() {
+const positionInit = function(comment) {
   var anchor = window.location.hash
-  if(LOCAL_HASH == 0 && anchor) {
-    var target = $(decodeURI(anchor))
-    if(target) {
-      pageScroll(target);
-      LOCAL_HASH = 1
-    } else {
-      LOCAL_HASH = 0
-    }
-  } else {
-    var position = store.get(window.location.href)
-    if(position) {
-      pageScroll(BODY, position);
-      store.del(window.location.href);
-    }
-    LOCAL_HASH = -1
+  var target = null;
+  if(LOCAL_HASH) {
+    store.del(window.location.href);
+    return
   }
+
+  if(anchor)
+    target = $(decodeURI(anchor))
+  else {
+    target = parseInt(store.get(window.location.href))
+  }
+
+  if(target) {
+    pageScroll(target);
+    LOCAL_HASH = 1;
+  }
+
+  if(comment && anchor && !LOCAL_HASH) {
+    pageScroll(target);
+    LOCAL_HASH = 1;
+  }
+
 }
 
 const clipBoard = function(str, callback) {
@@ -264,60 +276,3 @@ const clipBoard = function(str, callback) {
   BODY.removeChild(ta);
 }
 
-const loadRecentComment = function (pjax) {
-  var options = CONFIG.valine
-  var el = $('#rcomment')
-
-  if(!options.appId || !el)
-    return;
-
-  // set serverURLs
-  var prefix = 'https://'
-  var serverURLs = ''
-  if (!options.serverURLs) {
-    switch (options.appId.slice(-9)) {
-      // TAB
-      case '-9Nh9j0Va':
-        prefix += 'tab.leancloud.cn';
-        break;
-        // US
-      case '-MdYXbMMI':
-        prefix += 'us.avoscloud.com';
-        break
-      default:
-        prefix += 'avoscloud.com';
-        break;
-    }
-  }
-  serverURLs = options.serverURLs || prefix
-  try {
-    AV.init({
-      appId: options.appId,
-      appKey: options.appKey,
-      serverURLs: serverURLs
-    })
-
-    AV.Query.doCloudQuery(
-      "select nick, mail, comment, url from Comment where (rid='' or rid is not exists) order by -createdAt limit 0,10"
-    ).then(function(rets){
-      rets = (rets && rets.results) || []
-      const len = rets.length
-      if (len) {
-        var html = ''
-        for (var i = 0; i < len; i++) {
-          html += '<li class="item">'
-          +'<a href="'+ CONFIG.root + rets[i].get('url') +'#'+rets[i].id+'">'
-          + '<span class="breadcrumb">'+rets[i].get('nick') + ' @ '+ dateFormat(rets[i].createdAt)+'</span>'
-          + '<span>'+rets[i].get('comment').replace(/<[^>]+>/gi, '').substr(0, 100)+'</span></a>'
-          +'</li>'
-        }
-
-        el.createChild('ul', {
-          innerHTML: html
-        })
-
-        pjax.refresh(el);
-      }
-    }).catch(function(e){})
-  } catch (e) {}
-}

@@ -11,7 +11,7 @@ hexo.extend.generator.register('script', function(locals){
 
   var siteConfig = {
     version: env['version'],
-    hostname  : url.parse(config.url).hostname || config.url,
+    hostname: config.url,
     root: config.root,
     statics: theme.statics,
     favicon: {
@@ -22,13 +22,15 @@ hexo.extend.generator.register('script', function(locals){
       valine: theme.vendors.js.valine,
       chart: theme.vendors.js.chart,
       copy_tex: theme.vendors.js.copy_tex,
-      mediumzoom: theme.vendors.js.mediumzoom
+      fancybox: theme.vendors.js.fancybox
     },
     css: {
       valine: theme.css + "/comment.css",
       katex: theme.vendors.css.katex,
-      mermaid: theme.css + "/mermaid.css"
+      mermaid: theme.css + "/mermaid.css",
+      fancybox: theme.vendors.css.fancybox
     },
+    loader: theme.loader,
     search : null,
     valine: theme.valine,
     quicklink: {
@@ -50,11 +52,18 @@ hexo.extend.generator.register('script', function(locals){
     siteConfig.audio = theme.audio
   }
 
-  var text = 'var CONFIG = ' + JSON.stringify(siteConfig) + ';';
+  var text = '';
 
   ['utils', 'dom', 'global', 'sidebar', 'page', 'pjax'].forEach(function(item) {
     text += fs.readFileSync('themes/shoka/source/js/_app/'+item+'.js').toString();
   });
+
+  if(theme.fireworks && theme.fireworks.enable) {
+    text += fs.readFileSync('themes/shoka/source/js/_app/fireworks.js').toString();
+    siteConfig.fireworks = theme.fireworks.color
+  }
+
+  text = 'var CONFIG = ' + JSON.stringify(siteConfig) + ';' + text;
 
   return {
       path: theme.js + '/app.js',

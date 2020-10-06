@@ -61,6 +61,18 @@ font:
   codes:
     external: true
     family: Inconsolata
+# Whether to show the loading cat
+loader:
+  start: true # When entering the page
+  switch: true # When switching to another page
+
+sidebar:
+  # Sidebar Position.
+  #position: left
+  position: right
+  # Replace the default avatar image and set the url here.
+  avatar: avatar.jpg
+
 
 menu:
   home: / || home
@@ -72,12 +84,6 @@ menu:
     tags: /tags/ || tags
   # friends: /friends/ || heart
   # links: /links/ || magic
-
-sidebar:
-  # Sidebar Position.
-  #position: left
-  position: right
-  avatar: avatar.jpg
 
 # Social Links
 # Usage: `Key: permalink || icon || color`
@@ -144,16 +150,17 @@ reward:
     #alipay: /alipay.png
     #paypal: /paypal.png
 
-# bgm
-audio:
-  - https://music.163.com/#/playlist?id=94204433
 
 # ---------------------------------------------------------------
 # Third Party Plugins & Services Settings
 # ---------------------------------------------------------------
 
 # Dependencies: https://github.com/amehime/hexo-renderer-multi-markdown-it
-pangu: true
+pangu: false
+
+# bgm
+audio:
+  - https://music.163.com/#/playlist?id=94204433
 
 # Algolia Search
 # For more information: https://www.algolia.com
@@ -163,24 +170,37 @@ search:
 
 # Comments
 # Valine
-# For more information: https://valine.js.org, https://github.com/xCss/Valine
+# For more information: https://github.com/amehime/MiniValine
 valine:
   appId: #Your_appId
   appKey: #Your_appkey
   placeholder: ヽ(○´∀`)ﾉ♪ # Comment box placeholder
-  avatar: mp # Gravatar style
+  avatar: mp # Gravatar style : mp, identicon, monsterid, wavatar, robohash, retro
   pageSize: 10 # Pagination size
   lang: en
   visitor: true # Article reading statistic
-  recordIP: true # Whether to record the commenter IP
+  NoRecordIP: false # Whether to record the commenter IP
   serverURLs: # When the custom domain name is enabled, fill it in here (it will be detected automatically by default, no need to fill in)
-  requiredFields:
-    - nick
-    - mail
-  enableQQ: true
-  masters: # ['hash of master@email.com', 'hash of master2@email.com']
-  masterTag: 主人
-  tips: "昵称框中填入QQ号，将自动获取QQ昵称&邮箱&头像；其他邮箱由Gavatar提供头像。"
+  tagMeta:
+    - 主人
+    - 小伙伴
+    - 新朋友
+  master:
+    # - hash of master@email.com
+    # - hash of master2@email.com
+  friends:
+    # - hash of friend@email.com
+    # - hash of friend2@email.com
+  powerMode: true
+
+# click with Firework
+fireworks:
+  enable: true
+  color:
+    - "rgba(255,182,185,.9)"
+    - "rgba(250,227,217,.9)"
+    - "rgba(187,222,214,.9)"
+    - "rgba(138,198,209,.9)"
 
 # Quicklink Support
 # For more information: https://github.com/GoogleChromeLabs/quicklink
@@ -232,19 +252,19 @@ baidu_push: false
 #! ---------------------------------------------------------------
 vendors:
   css:
-    katex: npm/katex@0/dist/katex.min.css
+    katex: npm/katex@0.12.0/dist/katex.min.css
     comment: css/comment.css
+    fancybox: combine/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css,npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css
   js:
     pace: npm/pace-js@1.0.2/pace.min.js
     pjax: npm/pjax@0.2.8/pjax.min.js
     fetch: npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js
-    velocity: npm/velocity-animate@1.5.2/velocity.min.js
-    velocity_ui: npm/velocity-animate@1.5.2/velocity.ui.min.js
+    anime: npm/animejs@3.2.0/lib/anime.min.js
     algolia: npm/algoliasearch@4/dist/algoliasearch-lite.umd.js
     instantsearch: npm/instantsearch.js@4/dist/instantsearch.production.min.js
     lazyload: npm/lozad@1/dist/lozad.min.js
     quicklink: npm/quicklink@2/dist/quicklink.umd.js
-    mediumzoom: npm/medium-zoom@1.0.5/dist/medium-zoom.min.js
-    valine: js/valine.js
-    copy_tex: npm/katex@0/dist/contrib/copy-tex.min.js
+    fancybox: combine/npm/jquery@3.5.1/dist/jquery.min.js,npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js,npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js
+    valine: gh/amehime/MiniValine@4.2.2-beta9/dist/MiniValine.min.js
+    copy_tex: npm/katex@0.12.0/dist/contrib/copy-tex.min.js
     chart: npm/frappe-charts@1.5.0/dist/frappe-charts.min.iife.min.js

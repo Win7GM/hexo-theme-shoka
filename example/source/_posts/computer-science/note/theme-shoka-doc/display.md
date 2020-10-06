@@ -6,6 +6,8 @@ categories:
 tags:
 - Hexo
 - 教程
+valine:
+  placeholder: "1. 提问前请先仔细阅读本文档⚡\n2. 页面显示问题💥，请提供控制台截图📸或者您的测试网址\n3. 其他任何报错💣，请提供详细描述和截图📸，祝食用愉快💪"
 ---
 
 :::primary
@@ -96,6 +98,53 @@ sticky: true
 > 其实，不设置`category_map`也可以，只要在分类路径对应的文件夹下存在`cover.jpg`文件就行。
 > 现在，这项功能与`category_dir`的配置也无关，`hexo g`生成后，图片会自动被转移到`category_dir`的相关子目录下。
 
+
+# 图片展示与相册
+在文章的Front Matter设置`fancybox: false`，可以关闭文章页的图片展示功能。
+使用[Justified-Gallery](http://miromannino.github.io/Justified-Gallery/)对Gallery Post内图案进行排列。
+
+下面介绍一些小技巧：
+
+1. 让图案下方显示`title`的markdown代码
+```raw
+![这里是alt](https://tva3.sinaimg.cn/large/6833939bly1gicis081o9j20zk0m8dmr.jpg "这里是title")
+```
+![这里是alt](https://tva3.sinaimg.cn/large/6833939bly1gicis081o9j20zk0m8dmr.jpg "这里是title")
+
+
+2. 除了在Front Matter里配置`photos`可以显示相册图案列表外，还可以这样写
+```raw
+## 图案列表No.1
+![](https://tva3.sinaimg.cn/large/6833939bly1giclfdu6exj20zk0m87hw.jpg "这里是title")
+![](https://tva3.sinaimg.cn/large/6833939bly1giclflwv2aj20zk0m84qp.jpg)
+![](https://tva3.sinaimg.cn/large/6833939bly1giclg5ms2rj20zk0m8u0x.jpg)
+![](https://tva3.sinaimg.cn/large/6833939bly1giclhnx9glj20zk0m8npd.jpg)
+{.gallery}
+
+## 图案列表No.2
+![](https://tva3.sinaimg.cn/large/6833939bly1gicitht3xtj20zk0m8k5v.jpg)
+![](https://tva3.sinaimg.cn/large/6833939bly1giclil3m4ej20zk0m8tn8.jpg)
+![](https://tva3.sinaimg.cn/large/6833939bly1gicljgocqbj20zk0m8e81.jpg)
+![](https://tva3.sinaimg.cn/large/6833939bly1gipetfk5zwj20zk0m8e81.jpg)
+{.gallery data-height="220"}
+```
+
+`data-height`用来设置每行的高度，默认为`120`
+
+## 图案列表No.1
+![](https://tva3.sinaimg.cn/large/6833939bly1giclfdu6exj20zk0m87hw.jpg "这里是title")
+![](https://tva3.sinaimg.cn/large/6833939bly1giclflwv2aj20zk0m84qp.jpg)
+![](https://tva3.sinaimg.cn/large/6833939bly1giclg5ms2rj20zk0m8u0x.jpg)
+![](https://tva3.sinaimg.cn/large/6833939bly1giclhnx9glj20zk0m8npd.jpg)
+{.gallery}
+
+## 图案列表No.2
+![](https://tva3.sinaimg.cn/large/6833939bly1gicitht3xtj20zk0m8k5v.jpg)
+![](https://tva3.sinaimg.cn/large/6833939bly1giclil3m4ej20zk0m8tn8.jpg)
+![](https://tva3.sinaimg.cn/large/6833939bly1gicljgocqbj20zk0m8e81.jpg)
+![](https://tva3.sinaimg.cn/large/6833939bly1gipetfk5zwj20zk0m8e81.jpg)
+{.gallery data-height="220"}
+
 # 底部widgets
 目前页面底部可以显示两个小部件，即`随机文章`和`最近评论`。
 可以在主题`_config.yml`中配置开关。
@@ -105,3 +154,12 @@ widgets:
   random_posts: true
   recent_comments: true
 ```
+
+# 修改页面配色
+自行查看`themes/shoka/source/css/_colors.styl`
+
+# 修改404页面
+找到`themes/shoka/layout/page.njk`的第57 - 61行。
+59行的内容可以任意修改。
+
+如果只是想修改图片的话，位于：`themes/shoka/source/images/404.png`
